@@ -31,3 +31,8 @@ CardGameApp is setup with three players.
 Run CardGameApp as many times as possible to view consistent results.
 Cards are shuffled for each run therefore each run is unique.
 
+BIG NOTE: This application currently is not thread safe. To make it thread safe following are the options:
+1. use synchronized on Game.processPlayerAction() which is traditional
+2. use BlockingQueue with ThreadPoolExecutor
+3. using CompletableFuture.AsynchSupply (process asynchronously, should test before using it).
+
