@@ -9,7 +9,6 @@ import cardgame.strategy.BlackJackStrategy;
 
 public class Game {
 	
-	private final int numberOfPlayers;
 	List<Card> shuffledCards;
 	private List<Player> players = new ArrayList<>();
 	private List<Player> intermediatePlayers;
@@ -21,7 +20,6 @@ public class Game {
 	private boolean gameEnded = false;
 	
 	public Game(int numberOfPlayers, BlackJackStrategy blackJackStrategy, MessageFormattingStrategy messageFormattingStrategy) {
-		this.numberOfPlayers = numberOfPlayers;
 		this.deck = new Deck();
 		this.blackJackStrategy = blackJackStrategy;
 		this.messageFormattingStrategy = messageFormattingStrategy;
@@ -48,7 +46,6 @@ public class Game {
 	
 	public void dealFirstCard() {
 		ListIterator<Card> cardIterator = shuffledCards.listIterator();
-		Player firstPlayer = null;
 		int firstPlayerCardSize = 0;
 		while(firstPlayerCardSize != 2) {
 			
@@ -61,7 +58,6 @@ public class Game {
 					blackJackStrategy.applyStrategy(player, gameStatus, null);
 					
 					if(i == 0) {
-						firstPlayer = players.get(i);
 						firstPlayerCardSize = firstPlayerCardSize + 1;
 						
 					}
@@ -115,12 +111,11 @@ public class Game {
 					playerAction = "";
 					System.out.println(gameStatus.get(player.getPlayerIdentity()));
 					playersIterator.remove();
-					continue;
 				} else {
 					break;
 				}
 			}
-			if(gameEnded == true) {
+			if(gameEnded) {
 				playerGameStatus = "false";
 			}
 			return playerGameStatus;
@@ -137,7 +132,7 @@ public class Game {
 				
 				
 				
-				String dealerAction = null;
+				String dealerAction;
 				PlayerStatus dealerStatus = dealer.getPlayerStatus();
 				if(dealerStatus != PlayerStatus.BUSTED || dealerStatus != PlayerStatus.WINS) {
 					dealerAction = GameConstants.PLAYER_ACTION_HIT;
@@ -149,14 +144,17 @@ public class Game {
 				if(dealer.getScore() >=17 && dealer.getScore() < 21) {
 					dealer.setPlayerStatus(PlayerStatus.STAND);
 					if(gameStatus.get(dealer.getPlayerIdentity()).contains("hits")) {
-						gameStatus.get(dealer.getPlayerIdentity()).replace("hits", "stands");
+						//gameStatus.get(dealer.getPlayerIdentity()).replace("hits", "stands");
+						gameStatus.put(dealer.getPlayerIdentity(), gameStatus.get(dealer.getPlayerIdentity()).replace("hits", "stands"));
 					}
 					
 				} else if(dealer.getScore() == 21) {
 					if(gameStatus.get(dealer.getPlayerIdentity()).contains("hits")) {
-						gameStatus.get(dealer.getPlayerIdentity()).replace("hits", "wins");
+						//gameStatus.get(dealer.getPlayerIdentity()).replace("hits", "wins");
+						gameStatus.put(dealer.getPlayerIdentity(), gameStatus.get(dealer.getPlayerIdentity()).replace("hits", "wins"));
+						dealer.setPlayerStatus(PlayerStatus.WINS);
 					}
-					dealer.setPlayerStatus(PlayerStatus.WINS);
+
 				}
 				System.out.println(gameStatus.get(dealer.getPlayerIdentity()));
 				cardIterator.remove();
@@ -166,13 +164,11 @@ public class Game {
 				messageFormattingStrategy.printSummary(getPlayers());
 				gameEnded = true;
 				break;
-			} else {
-				continue;
 			}
 		}
 	}
 	
-	private void clear() {
+	public void clear() {
 		players.clear();
 		gameStatus.clear();
 		deck.clear();
@@ -184,7 +180,7 @@ public class Game {
 		dealFirstCard();
 	}
 
-	public boolean isGameEnded() {
+	private boolean isGameEnded() {
 		return gameEnded;
 	}
 

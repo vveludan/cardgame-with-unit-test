@@ -1,0 +1,33 @@
+# Eclipse metadata files that can be ignored
+.classpath
+.editorconfig
+.factorypath
+.gitattributes
+.project
+.settings/
+bin/
+
+target/ 
+# maven project related ignore files and directories
+.mvn/
+target/
+
+# IDEA metadata files to be ignored
+README.md
+mvnw.cmd
+node/
+node_modules/
+package-lock.json
+src/main/webapp/assets/sf/manifest.json
+src/main/webapp/assets/sumfox-logo-167x33-Copy.png
+target/
+yarn.lock
+/.idea/jsLibraryMappings.xml
+/.idea/libraries/tsconfig_roots.xml
+/.vscode/settings.json
+/out/production/main/com/eclinso/sumfox/config/MethodSecurityConfiguration.txt
+/src/main/main.iml
+/.idea/misc.xml
+/.idea/libraries
+.idea
+libraries
