@@ -51,6 +51,20 @@ public class Game {
 			
 			for(int i = 0; i < players.size(); i++) {
 				if(firstPlayerCardSize == 2) break;
+
+/*				if(cardIterator.hasNext()) {
+					Player player = players.get(i);
+					Card card = cardIterator.next();
+					player.addCard(card);
+					blackJackStrategy.applyStrategy(player, gameStatus, null);
+
+					if(i == 0) {
+						firstPlayerCardSize = firstPlayerCardSize + 1;
+					}
+					cardIterator.remove();
+					System.out.println(gameStatus.get(player.getPlayerIdentity()));
+				}*/
+
 				while(cardIterator.hasNext()) {
 					Player player = players.get(i);
 					Card card = cardIterator.next();
@@ -98,15 +112,15 @@ public class Game {
 						continue;
 					}
 				}
-				while(cardIterator.hasNext()) {
+				if(cardIterator.hasNext()) {
 					Card card = cardIterator.next();
-						player.addCard(card);
-						blackJackStrategy.applyStrategy(player, gameStatus, playerAction);
-						playerGameStatus = gameStatus.get(player.getPlayerIdentity());
-						cardIterator.remove();
-						break;
+					player.addCard(card);
+					blackJackStrategy.applyStrategy(player, gameStatus, playerAction);
+					playerGameStatus = gameStatus.get(player.getPlayerIdentity());
+					cardIterator.remove();
 				}
-				
+
+
 				if((player.getPlayerStatus() == PlayerStatus.BUSTED || player.getPlayerStatus() == PlayerStatus.WINS || player.getPlayerStatus() == PlayerStatus.STAND)) {
 					playerAction = "";
 					System.out.println(gameStatus.get(player.getPlayerIdentity()));
@@ -126,12 +140,10 @@ public class Game {
 		
 		ListIterator<Card> cardIterator = shuffledCards.listIterator();
 		while(dealer.getPlayerStatus() == PlayerStatus.GAME_IN_PROGRESS || dealer.getPlayerStatus() == PlayerStatus.HIT) {
-			while(cardIterator.hasNext()) {
+			if(cardIterator.hasNext()) {
 				Card dealerCard = cardIterator.next();
 				dealer.addCard(dealerCard);
-				
-				
-				
+
 				String dealerAction;
 				PlayerStatus dealerStatus = dealer.getPlayerStatus();
 				if(dealerStatus != PlayerStatus.BUSTED || dealerStatus != PlayerStatus.WINS) {
@@ -144,13 +156,11 @@ public class Game {
 				if(dealer.getScore() >=17 && dealer.getScore() < 21) {
 					dealer.setPlayerStatus(PlayerStatus.STAND);
 					if(gameStatus.get(dealer.getPlayerIdentity()).contains("hits")) {
-						//gameStatus.get(dealer.getPlayerIdentity()).replace("hits", "stands");
 						gameStatus.put(dealer.getPlayerIdentity(), gameStatus.get(dealer.getPlayerIdentity()).replace("hits", "stands"));
 					}
 					
 				} else if(dealer.getScore() == 21) {
 					if(gameStatus.get(dealer.getPlayerIdentity()).contains("hits")) {
-						//gameStatus.get(dealer.getPlayerIdentity()).replace("hits", "wins");
 						gameStatus.put(dealer.getPlayerIdentity(), gameStatus.get(dealer.getPlayerIdentity()).replace("hits", "wins"));
 						dealer.setPlayerStatus(PlayerStatus.WINS);
 					}
@@ -158,7 +168,6 @@ public class Game {
 				}
 				System.out.println(gameStatus.get(dealer.getPlayerIdentity()));
 				cardIterator.remove();
-				break;
 			}
 			if(dealer.getPlayerStatus() == PlayerStatus.STAND || dealer.getPlayerStatus() == PlayerStatus.WINS || dealer.getPlayerStatus() == PlayerStatus.BUSTED) {
 				messageFormattingStrategy.printSummary(getPlayers());
