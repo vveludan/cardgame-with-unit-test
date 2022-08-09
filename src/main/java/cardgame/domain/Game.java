@@ -104,7 +104,6 @@ public class Game {
 					player.setPlayerStatus(PlayerStatus.STAND);
 					playersIterator.remove();
 					if(intermediatePlayers.size() == 1) {
-						playerAction = "";
 						processDealerActions();
 						break;
 					} else {

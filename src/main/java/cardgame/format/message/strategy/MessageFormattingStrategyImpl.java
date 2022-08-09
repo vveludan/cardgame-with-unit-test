@@ -93,6 +93,11 @@ public class MessageFormattingStrategyImpl implements MessageFormattingStrategy 
 				buffer.append("Player ").append(player.getPlayerIdentity()).append(" wins over dealer\n");
 				player.setPlayerStatus(PlayerStatus.WINS);
 			}
+			else if(dealerScore < player.getScore() && player.getScore() <= 21) {
+				buffer.append("Player ").append(player.getPlayerIdentity()).append(" wins over dealer\n");
+				player.setPlayerStatus(PlayerStatus.WINS);
+
+			}
 			else if(dealerScore == player.getScore()) {
 				buffer.append("Dealer ties with player.\n");
 				player.setPlayerStatus(PlayerStatus.TIES);
